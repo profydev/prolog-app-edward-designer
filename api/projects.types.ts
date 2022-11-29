@@ -5,10 +5,12 @@ export enum ProjectLanguage {
 }
 
 export enum ProjectStatus {
-  stable = "stable",
+  info = "stable",
   warning = "warning",
-  critical = "critical",
+  error = "critical",
 }
+
+export type ProjectStatusText = keyof typeof ProjectStatus;
 
 export type Project = {
   id: string;
@@ -16,5 +18,5 @@ export type Project = {
   language: ProjectLanguage;
   numIssues: number;
   numEvents24h: number;
-  status: ProjectStatus;
+  status: ProjectStatusText;
 };
