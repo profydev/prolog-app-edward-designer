@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { Routes } from "@config/routes";
 import { NavigationContext } from "./navigation-context";
 import { MenuItemButton } from "./menu-item-button";
 import { MenuItemLink } from "./menu-item-link";
 import { Button } from "@features/ui";
-import { breakpoint, color, space, zIndex } from "@styles/theme";
+import { theme, breakpoint, color, space, zIndex } from "@styles/theme";
 
 const menuItems = [
   { text: "Projects", iconSrc: "/icons/projects.svg", href: Routes.projects },
@@ -165,6 +165,27 @@ export function SidebarNavigation() {
   const openEmailClient = () => {
     window.open("mailto:support@prolog-app.com?subject=Support Request:");
   };
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (isSidebarCollapsed) {
+        const htmlElement = document.querySelector("html");
+        const desktopBreakpointWidthInEm = parseInt(theme.breakpoint.desktop);
+        const windowWidthInEm = htmlElement
+          ? window.innerWidth /
+            parseFloat(
+              getComputedStyle(htmlElement).getPropertyValue("font-size")
+            )
+          : 0;
+        console.log(desktopBreakpointWidthInEm, windowWidthInEm);
+        if (windowWidthInEm < desktopBreakpointWidthInEm) {
+          toggleSidebar();
+        }
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
+    return () => window.removeEventListener("resize", resizeHandler);
+  }, [isSidebarCollapsed, toggleSidebar]);
 
   return (
     <Container isCollapsed={isSidebarCollapsed}>
