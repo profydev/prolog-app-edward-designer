@@ -31,6 +31,17 @@ describe("Sidebar Navigation", () => {
         .should("have.attr", "href", "/dashboard/settings");
     });
 
+    it("Support link opens an email client on click", () => {
+      cy.window().then((win) => {
+        cy.stub(win, "open").as("Open");
+      });
+      cy.get("nav").contains("Support").click();
+      cy.get("@Open").should(
+        "have.been.calledOnceWith",
+        "mailto:support@prolog-app.com?subject=Support Request:"
+      );
+    });
+
     it("is collapsible", () => {
       // collapse navigation
       cy.get("nav").contains("Collapse").click();
