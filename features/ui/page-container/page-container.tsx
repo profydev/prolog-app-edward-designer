@@ -3,6 +3,7 @@ import Head from "next/head";
 import styled from "styled-components";
 import { SidebarNavigation } from "@features/ui";
 import { color, displayFont, textFont, space, breakpoint } from "@styles/theme";
+import { Footer } from "../footer";
 
 type PageContainerProps = {
   children: React.ReactNode;
@@ -31,7 +32,8 @@ const ContentContainer = styled.div`
   margin-top: ${({ theme }) => theme.size.headerHeight};
   padding: ${space(8, 3)};
   background: white;
-
+  display: flex;
+  flex-direction: column;
   @media (min-width: ${breakpoint("desktop")}) {
     min-height: calc(100vh - ${space(3)} - 2 * ${space(8)});
     margin-top: ${space(3)};
@@ -52,6 +54,10 @@ const Info = styled.div`
   ${textFont("md", "regular")}
 `;
 
+const Content = styled.div`
+  flex: 1;
+`;
+
 export function PageContainer({ children, title, info }: PageContainerProps) {
   // combine title in a single string to prevent below warning
   // "Warning: A title element received an array with more than 1 element as children."
@@ -69,8 +75,9 @@ export function PageContainer({ children, title, info }: PageContainerProps) {
         <ContentContainer>
           <Title>{title}</Title>
           <Info>{info}</Info>
-          {children}
+          <Content>{children}</Content>
         </ContentContainer>
+        <Footer />
       </Main>
     </Container>
   );
