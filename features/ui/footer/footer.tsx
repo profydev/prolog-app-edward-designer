@@ -11,8 +11,8 @@ const FooterContainer = styled.footer`
     padding-block: 13px;
   }
   @media (min-width: ${breakpoint("desktop")}) {
-    flex-direction: row;
     flex-warp: none;
+    flex-direction: row;
     padding: 0;
     > span {
       padding: 18px 32px;
