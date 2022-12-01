@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { color, breakpoint } from "@styles/theme";
 
 const FooterContainer = styled.footer`
-  background-color: #f9fafb;
   display: flex;
   flex-direction: column;
+  background-color: #f9fafb;
   padding-block: 12px;
   > span {
     padding-block: 13px;
