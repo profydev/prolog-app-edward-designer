@@ -39,7 +39,7 @@ yarn-error.log*
 
 .vscode
 .eslintcache
-.env
+#.env
 
 # Cypress test videos
 cypress/videos/
