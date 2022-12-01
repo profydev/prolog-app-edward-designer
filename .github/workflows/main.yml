@@ -44,4 +44,4 @@ jobs:
         if: failure()
         with:
           name: cypress-snapshots
-          path: cypress/snapshots
+          path: home/runner/work/prolog-app-edward-designer/prolog-app-edward-designer/cypress/*
