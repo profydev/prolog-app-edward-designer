@@ -46,3 +46,27 @@ describe("Project List", () => {
     });
   });
 });
+
+describe("Spinner", () => {
+  it("should show spinner and hide it when data is shown", () => {
+    cy.intercept("GET", "https://prolog-api.profy.dev/project", (req) => {
+      req.reply({
+        statusCode: 200,
+        delay: 2000,
+        fixture: "projects.json",
+      });
+    }).as("getProjects");
+
+    // open projects page
+    cy.visit("http://localhost:3000/dashboard");
+
+    cy.get('[data-cy="spinner"]')
+      .should("be.visible")
+      .then(() => {
+        // wait for request to resolve
+        cy.wait("@getProjects");
+        cy.get('[data-cy="spinner"]').should("not.exist");
+        cy.get("a").contains("View issues");
+      });
+  });
+});
