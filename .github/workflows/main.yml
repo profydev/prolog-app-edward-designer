@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
   # also runs inside pull requests that target the main branch
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 jobs:
   build:
@@ -37,11 +37,11 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          env: NEXT_PUBLIC_APP_VERSION=${{ steps.package-version.outputs.current-version}}
-          start: npm start
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-snapshots
-          path: home/runner/work/prolog-app-edward-designer/prolog-app-edward-designer/cypress/*
+          record: true
+        env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_APP_VERSION=${{ steps.package-version.outputs.current-version}}
+        start: npm start
