@@ -22,20 +22,20 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
+  min-height: 100vh;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ContentContainer = styled.div`
-  min-height: calc(
-    100vh - 2 * ${space(8)} - ${({ theme }) => theme.size.headerHeight}
-  );
   margin-top: ${({ theme }) => theme.size.headerHeight};
   padding: ${space(8, 3)};
   background: white;
+  flex: 1;
   display: flex;
   flex-direction: column;
   @media (min-width: ${breakpoint("desktop")}) {
-    min-height: calc(100vh - ${space(3)} - 2 * ${space(8)});
     margin-top: ${space(3)};
     padding: ${space(8)};
     border-top-left-radius: ${space(10)};
