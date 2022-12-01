@@ -72,12 +72,12 @@ export function PageContainer({ children, title, info }: PageContainerProps) {
 
       <SidebarNavigation />
       <Main>
-        <Footer />
         <ContentContainer>
           <Title>{title}</Title>
           <Info>{info}</Info>
           <Content>{children}</Content>
         </ContentContainer>
+        <Footer />
       </Main>
     </Container>
   );
