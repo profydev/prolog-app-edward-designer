@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
     # also runs inside pull requests that target the main branch
-    pull_request:
-      branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
