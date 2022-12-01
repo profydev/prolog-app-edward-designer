@@ -36,12 +36,12 @@ jobs:
       # run tests with Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v4
-        with:
-          record: true
         env:
           # pass the Cypress Cloud record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_PUBLIC_APP_VERSION: ${{ steps.package-version.outputs.current-version}}
-        start: npm start
+        with:
+          record: true
+          start: npm start
