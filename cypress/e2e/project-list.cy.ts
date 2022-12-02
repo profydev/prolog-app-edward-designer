@@ -70,3 +70,21 @@ describe("Spinner", () => {
       });
   });
 });
+
+describe("Error", () => {
+  it("should show error in case data is not loaded", () => {
+    cy.intercept("https://prolog-api.profy.dev/project", {
+      forceNetworkError: true,
+    }).as("getProjects");
+
+    // open projects page
+    cy.visit("http://localhost:3000/dashboard");
+    cy.wait(10000).then(() => {
+      cy.get("button").should("contain", "Try again");
+      cy.get("div").should(
+        "contain",
+        "There was a problem while loading the project data"
+      );
+    });
+  });
+});
