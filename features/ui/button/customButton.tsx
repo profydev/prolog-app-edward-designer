@@ -47,6 +47,7 @@ export const ButtonContainer = styled(Button)<{
     padding: 0;
   }
 
+  // default style
   border-radius: 8px;
   border: 1px solid;
 
