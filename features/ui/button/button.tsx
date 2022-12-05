@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
-  cursor: pointer;
-
   // remove default button styles
   border: none;
   margin: 0;
