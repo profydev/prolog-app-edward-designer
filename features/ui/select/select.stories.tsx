@@ -1,31 +1,34 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Checkbox, CheckboxSize } from "./checkbox";
+import { Select } from "./select";
 
 export default {
-  title: "UI/Checkbox",
-  component: Checkbox,
+  title: "UI/Select",
+  component: Select,
   parameters: {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof Checkbox>;
+} as ComponentMeta<typeof Select>;
 
-const Template: ComponentStory<typeof Checkbox> = (args) => (
+const Template: ComponentStory<typeof Select> = (args) => (
   <div style={{ padding: 50 }}>
-    <Checkbox {...args} />
+    <Select {...args} />
   </div>
 );
 
 export const Default = Template.bind({});
 Default.args = {
-  size: CheckboxSize.sm,
   id: "id",
-  value: "value",
+  name: "name",
   label: "label",
+  placeholder: "Select team member",
+  options: ["option1", "option2", "option3"],
   disabled: false,
-  indeterminate: false,
-  checked: false,
+  hint: "This is a hint text to help user.",
+  error: "",
+  value: "option1",
+  icon: "/icons/member.svg",
 };
 Default.parameters = {
   viewMode: "docs",

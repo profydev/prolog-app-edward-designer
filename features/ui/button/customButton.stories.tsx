@@ -9,11 +9,6 @@ export default {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
     layout: "fullscreen",
   },
-  size: ButtonSize.sm,
-  color: ButtonColor.primary,
-  disabled: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onClick: () => {},
 } as ComponentMeta<typeof CustomButton>;
 
 const Template: ComponentStory<typeof CustomButton> = (args) => (
