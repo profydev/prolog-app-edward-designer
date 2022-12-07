@@ -22,8 +22,13 @@ Default.args = {
   id: "id",
   name: "name",
   label: "label",
-  options: ["option1", "option2", "option3"],
+  placeholder: "olivia@untitledui.com",
   disabled: false,
+  icon: "",
+  hint: "",
+  error: false,
+  errorMsg: "",
+  inputValue: "",
 };
 Default.parameters = {
   viewMode: "docs",
