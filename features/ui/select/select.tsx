@@ -247,6 +247,7 @@ export const Select = ({
       if (customOptionsRef.current.style.display === "block") {
         const root = document.querySelector(":root") as HTMLElement;
         customOptionsRef.current.style.display = "none";
+        customSelectRef.current.style.outline = "none";
         root.style.setProperty("--chevronDirection", "0deg");
       }
     };
