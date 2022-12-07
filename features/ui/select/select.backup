@@ -1,0 +1,158 @@
+import { useEffect, useRef } from "react";
+import styled, { css } from "styled-components";
+import { color, textFont, space } from "@styles/theme";
+
+interface SelectType {
+  id: string;
+  name: string;
+  label?: string;
+  options: string[];
+  disabled?: boolean;
+  hint?: string;
+}
+
+const SelectContainer = styled.div`
+  position: relative;
+  width: 320px;
+  &:after {
+    position: absolute;
+    content: "";
+    width: 12px;
+    height: 8px;
+    background-color: ${color("gray", 500)};
+    top: 16px;
+    right: 19.5px;
+    mask: url("/icons/chevron.svg") no-repeat top right;
+  }
+  & > div {
+    position: absolute;
+    z-index: 9999;
+  }
+`;
+
+const SelectLabel = styled.label`
+  ${textFont("sm", "medium")}
+  color: ${color("gray", 700)};
+  display: block;
+  margin-bottom: 6px;
+`;
+
+const SelectTag = styled.select`
+  // remove default styles
+  appearance: none;
+  display: none;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+
+  width: 100%;
+  border: 1px solid ${color("gray", 300)};
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  display: grid;
+  position: relative;
+
+  :disabled {
+    color: ${color("gray", 500)};
+    background-color: ${color("gray", 50)};
+  }
+
+  :invalid {
+    color: ${color("gray", 500)};
+  }
+
+  :focus {
+    border-color: ${color("primary", 300)};
+    outline: 4px solid ${color("primary", 100)};
+  }
+`;
+
+const SelectOption = styled.option``;
+
+const SelectHint = styled.span`
+  ${textFont("sm", "regular")}
+  color: ${color("gray", 500)};
+  display: block;
+  margin-top: 6px;
+`;
+
+const CustomSelect = styled.div``;
+
+const titleCase = (str: string): string =>
+  str.charAt(0).toUpperCase() + str.slice(1);
+
+export const Select = ({
+  id,
+  name,
+  label = "",
+  disabled = false,
+  options,
+  hint,
+}: SelectType) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
+  useEffect(() => {
+    const optionsPane = document.createElement("div");
+    selectRef.current &&
+      selectRef.current.childNodes.forEach((node, i) => {
+        if (i === 0 && node) {
+          const a = document.createElement("div");
+          a.append(node.textContent || "");
+          optionsPane.appendChild(a);
+        }
+      });
+
+    containerRef.current && containerRef.current.appendChild(optionsPane);
+  }, [options, selectRef]);
+  return (
+    <div>
+      {label && <SelectLabel htmlFor={id}>{label}</SelectLabel>}
+      <SelectContainer ref={containerRef}>
+        <SelectTag
+          ref={selectRef}
+          required
+          id={id}
+          name={name}
+          disabled={disabled}
+        >
+          <option value="" disabled selected>
+            Select your option
+          </option>
+          {options.map((option) => {
+            const lowerCasedOption = option.toLowerCase();
+            return (
+              <SelectOption value={lowerCasedOption} key={lowerCasedOption}>
+                {titleCase(lowerCasedOption)}
+              </SelectOption>
+            );
+          })}
+        </SelectTag>
+      </SelectContainer>
+      <div className="selectCustom js-selectCustom" aria-hidden="true">
+        <div className="selectCustom-trigger">Select role...</div>
+        <div className="selectCustom-options">
+          <div className="selectCustom-option" data-value="ds">UI/UX Designer</div>
+          <div className="selectCustom-option" data-value="fe">Frontend Engineer</div>
+          <div className="selectCustom-option" data-value="be">Backend Engineer</div>
+          <div className="selectCustom-option" data-value="qa">QA Engineer</div>
+          <div className="selectCustom-option" data-value="un">Unicorn</div>
+        </div>
+      </div>
+
+
+      {hint && <SelectHint>{hint}</SelectHint>}
+    </div>
+  );
+};

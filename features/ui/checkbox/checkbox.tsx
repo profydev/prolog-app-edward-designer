@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
-import { color, textFont, space } from "@styles/theme";
+import { color, textFont } from "@styles/theme";
 
 export enum CheckboxSize {
   sm = "sm",
@@ -123,7 +123,7 @@ export const Checkbox = ({
         name={id}
         value={value}
         disabled={disabled}
-        checked={checked}
+        defaultChecked={checked}
       />
       {label}
     </CheckboxLabel>
