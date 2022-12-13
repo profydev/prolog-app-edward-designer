@@ -1,4 +1,4 @@
-describe("Sidebar Navigation", () => {
+describe("Footer", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000/dashboard");
   });

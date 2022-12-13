@@ -28,6 +28,12 @@ module.exports = {
     config.resolve.alias["@styles"] = path.resolve("./styles");
     config.resolve.alias["@config"] = path.resolve("./config");
     config.resolve.alias["@features"] = path.resolve("./features");
+    config.resolve.alias["@typings"] = path.resolve("./typings");
+
+    //https://stackoverflow.com/questions/67409774/cant-properly-set-up-next-config-storybook-to-get-images-from-url
+    config.resolve.alias["next/image"] = require.resolve(
+      "./__mocks__/NextJSImageMock.js"
+    );
     return config;
   },
 };

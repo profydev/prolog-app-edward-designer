@@ -5,7 +5,14 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ["prolog-api.profy.dev"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "prolog-api.profy.dev",
+        port: "",
+        pathname: "**",
+      },
+    ],
   },
 };
 
