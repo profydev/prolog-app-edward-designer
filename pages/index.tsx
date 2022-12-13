@@ -1,4 +1,6 @@
 import { useRef, useState, useEffect } from "react";
+import Head from "next/head";
+
 import styled from "styled-components";
 import { Routes } from "@config/routes";
 import { color, textFont, breakpoint } from "@styles/theme";
@@ -8,6 +10,13 @@ import {
   ButtonSize,
 } from "@features/ui/button/customButton";
 import Link from "next/link";
+import {
+  SectionHero,
+  SectionType,
+  TLandingPage,
+} from "@typings/landingpage.types";
+
+import { HeroSection } from "@features/ui/hero-section";
 
 const PageWrapper = styled.div``;
 
@@ -163,9 +172,13 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const IssuesPage = () => {
+const IndexPage = ({ data }: { data: TLandingPage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const modalWrapperRef = useRef<HTMLDivElement>(null);
+
+  const hero = data.sections.find(
+    (section) => section.sectionType === SectionType.hero
+  ) as SectionHero;
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -204,6 +217,17 @@ const IssuesPage = () => {
 
   return (
     <PageWrapper>
+      <Head>
+        <title>{data.meta.title}</title>
+        <meta name="description" content={data.meta.description} />
+        <meta property="og:title" content={data.meta.title} />
+        <meta property="og:description" content={data.meta.description} />
+        <meta
+          property="og:image"
+          content={`https://prolog-api.profy.dev/${data.meta.image}`}
+        />
+        <meta name="twitter:card" content="summary_large_image"></meta>
+      </Head>
       <ModalWrapper ref={modalWrapperRef}>
         <Modal>
           <MessageWrapper>
@@ -253,7 +277,7 @@ const IssuesPage = () => {
           </CustomButton>
         </MenuIconWrapper>
       </Header>
-      <Main>Hero Image</Main>
+      <Main>{hero && <HeroSection data={hero} />}</Main>
       <ContactButton onClick={onClickHandler}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/message.svg" alt="Contact" />
@@ -262,4 +286,10 @@ const IssuesPage = () => {
   );
 };
 
-export default IssuesPage;
+export default IndexPage;
+
+export async function getServerSideProps() {
+  const res = await fetch(`https://prolog-api.profy.dev/content-page/home`);
+  const data = await res.json();
+  return { props: { data } };
+}
