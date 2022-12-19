@@ -4,11 +4,16 @@ import styled from "styled-components";
 
 import { Header } from "@features/ui/header";
 import { HeroSection } from "@features/ui/hero-section";
+import { SocialProofSection } from "@features/ui/social-proof-section";
+import { TestimonialSection } from "@features/ui/testimonial-section";
+
 import { Modal } from "@features/ui/modal";
 
 import {
   SectionHero,
+  SectionSocialProof,
   SectionType,
+  SectionTestimonial,
   TLandingPage,
 } from "@typings/landingpage.types";
 
@@ -17,7 +22,7 @@ const PageWrapper = styled.div``;
 const Main = styled.main``;
 
 const ContactButton = styled.button`
-  position: absolute;
+  position: fixed;
   bottom: 2.5rem;
   right: 2.5rem;
   padding: 1rem;
@@ -38,6 +43,14 @@ const IndexPage = ({ data }: { data: TLandingPage }) => {
   const hero = data.sections.find(
     (section) => section.sectionType === SectionType.hero
   ) as SectionHero;
+
+  const socialProof = data.sections.find(
+    (section) => section.sectionType === SectionType.socialProof
+  ) as SectionSocialProof;
+
+  const testimonial = data.sections.find(
+    (section) => section.sectionType === SectionType.testimonials
+  ) as SectionTestimonial;
 
   const onClickHandler = () => {
     setIsModalVisible(!isModalVisible);
@@ -60,7 +73,11 @@ const IndexPage = ({ data }: { data: TLandingPage }) => {
       {isModalVisible && <Modal setIsModalVisible={setIsModalVisible} />}
 
       <Header />
-      <Main>{hero && <HeroSection data={hero} />}</Main>
+      <Main>
+        {hero && <HeroSection data={hero} />}
+        {socialProof && <SocialProofSection data={socialProof} />}
+        {testimonial && <TestimonialSection data={testimonial} />}
+      </Main>
       <ContactButton onClick={onClickHandler}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/message.svg" alt="Contact" />
