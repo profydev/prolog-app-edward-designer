@@ -38,7 +38,7 @@ export type SectionSocialProof = {
 
 export type SectionTestimonial = {
   sectionType: SectionType.testimonials;
-  theme: string;
+  theme: BackgroundTheme;
   title: string;
   subtitle: string;
   testimonials: Testimonial[];
