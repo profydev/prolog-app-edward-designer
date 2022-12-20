@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { color, space, textFont } from "@styles/theme";
+import { color, space, textFont, breakpoint } from "@styles/theme";
 import { ProjectLanguage } from "@api/projects.types";
 import { useProjects } from "@features/projects";
 import { useGetIssues } from "../../api";
@@ -67,12 +67,18 @@ const PageNumber = styled.span`
   ${textFont("sm", "medium")}
 `;
 
-const FilterContainer = styled.form`
+const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 1rem;
   margin-bottom: 25px;
+  @media (max-width: ${breakpoint("desktop")}) {
+    & div {
+      flex: 1;
+    }
+  }
 `;
 
 function getParsedInfo(

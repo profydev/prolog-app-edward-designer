@@ -22,6 +22,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
+  isolation: isolate;
   min-height: 100vh;
   flex: 1;
   display: flex;
