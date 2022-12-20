@@ -155,7 +155,7 @@ export function IssueList() {
           id="status"
           name="status"
           placeholder="Status"
-          options={["--", "Unresolved", "Resolved"]}
+          options={["--", ...Object.keys(StatusEnum)]}
           onChange={fieldChangeHandler("status")}
           value={status}
         />
@@ -163,7 +163,7 @@ export function IssueList() {
           id="level"
           name="level"
           placeholder="Level"
-          options={["--", "Error", "Warning", "Info"]}
+          options={["--", ...Object.keys(LevelEnum)]}
           onChange={fieldChangeHandler("level")}
           value={level}
         />
