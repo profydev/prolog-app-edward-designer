@@ -19,6 +19,8 @@ const menuItems = [
 ];
 
 const containerStyles = css`
+  isolation: isolate;
+  z-index: 1;
   width: 100%;
   display: flex;
   flex-direction: column;

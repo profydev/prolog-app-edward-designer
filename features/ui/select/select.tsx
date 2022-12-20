@@ -15,11 +15,14 @@ interface SelectType {
   hint?: string;
   error?: string;
   icon?: string;
+  onChange?: (event: string) => void;
 }
+
+const SelectGroupContainer = styled.div``;
 
 const SelectContainer = styled.div`
   position: relative;
-  width: 320px;
+  min-width: 160px;
   &:after {
     position: absolute;
     content: "";
@@ -63,7 +66,7 @@ const NativeSelect = styled.select<{
   font-family: inherit;
   font-size: inherit;
   cursor: inherit;
-  line-height: inherit;
+  line-height: 1.5;
   outline: none;
 
   width: 100%;
@@ -71,7 +74,6 @@ const NativeSelect = styled.select<{
   padding: 10px 14px;
   font-size: 1rem;
   cursor: pointer;
-  line-height: 1.1;
   background-color: #fff;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
   display: grid;
@@ -102,7 +104,9 @@ const NativeSelect = styled.select<{
   }
 `;
 
-const SelectOption = styled.option``;
+const SelectOption = styled.option`
+  z-index: 99;
+`;
 
 const SelectHint = styled.span`
   ${textFont("sm", "regular")}
@@ -123,6 +127,8 @@ const CustomSelect = styled.div<{
   disabled: boolean;
   icon: string;
 }>`
+  ${textFont("md", "medium")}
+  z-index: 100;
   position: absolute;
   top: 0;
   left: 0;
@@ -133,7 +139,6 @@ const CustomSelect = styled.div<{
   padding: 10px 14px;
   font-size: 1rem;
   cursor: pointer;
-  line-height: 1.1;
   background-color: #fff;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
   display: grid;
@@ -204,25 +209,30 @@ export const Select = ({
   hint,
   error = "",
   icon = "",
+  onChange,
 }: SelectType) => {
   const [selected, setSelected] = useState(value);
   const customSelectRef = useRef<HTMLDivElement>(null);
   const customOptionsRef = useRef<HTMLDivElement>(null);
 
   const clickHandler = useCallback(() => {
-    const root = document.querySelector(":root") as HTMLElement;
     if (customOptionsRef.current && customSelectRef.current && !disabled) {
       if (customOptionsRef.current.style.display === "block") {
         customOptionsRef.current.style.display = "none";
         customSelectRef.current.style.outline = "none";
-        customSelectRef.current.style.setProperty("--chevronDirection", "0deg");
-        root.style.setProperty("--chevronDirection", "0deg");
+        customSelectRef.current.parentElement?.style.setProperty(
+          "--chevronDirection",
+          "0deg"
+        );
       } else {
         customOptionsRef.current.style.display = "block";
         customSelectRef.current.style.outline = error
           ? "4px solid #FEE4E2"
           : "4px solid #F4EBFF";
-        root.style.setProperty("--chevronDirection", "180deg");
+        customSelectRef.current.parentElement?.style.setProperty(
+          "--chevronDirection",
+          "180deg"
+        );
       }
     }
   }, [customOptionsRef, customSelectRef, disabled, error]);
@@ -244,11 +254,14 @@ export const Select = ({
         customSelectRef.current.contains(e.target)
       )
         return;
+
       if (customOptionsRef.current.style.display === "block") {
-        const root = document.querySelector(":root") as HTMLElement;
         customOptionsRef.current.style.display = "none";
         customSelectRef.current.style.outline = "none";
-        root.style.setProperty("--chevronDirection", "0deg");
+        customSelectRef.current.parentElement?.style.setProperty(
+          "--chevronDirection",
+          "0deg"
+        );
       }
     };
 
@@ -256,8 +269,14 @@ export const Select = ({
     return () => document.removeEventListener("mousedown", closeOpenMenus);
   }, [disabled]);
 
+  useEffect(() => {
+    if (selected == "--") {
+      setSelected("");
+    }
+  }, [selected]);
+
   return (
-    <div>
+    <SelectGroupContainer>
       {label && <SelectLabel htmlFor={id}>{label}</SelectLabel>}
       <SelectContainer>
         <NativeSelect
@@ -266,7 +285,10 @@ export const Select = ({
           name={name}
           disabled={disabled}
           error={error}
-          onChange={(e) => setSelected(e.target.value)}
+          onChange={(e) => {
+            setSelected(e.target.value);
+            if (onChange) onChange(e.target.value);
+          }}
         >
           {placeholder && !selected && (
             <option value="" disabled selected>
@@ -292,6 +314,7 @@ export const Select = ({
           disabled={disabled}
           aria-hidden={true}
           icon={icon}
+          data-test-id={`${id}-test-select`}
         >
           {selected ? (
             titleCase(selected)
@@ -299,10 +322,13 @@ export const Select = ({
             <Placeholder>{placeholder}</Placeholder>
           )}
         </CustomSelect>
-        <CustomSelectOptionContainer ref={customOptionsRef}>
+        <CustomSelectOptionContainer
+          ref={customOptionsRef}
+          data-test-id={`${id}-test-options`}
+        >
           {options.map((option) => {
             const lowerCasedOption = option.toLowerCase();
-            if (option === selected) {
+            if (lowerCasedOption === selected.toLowerCase()) {
               return (
                 <CustomSelectedOption key={lowerCasedOption}>
                   {titleCase(lowerCasedOption)}
@@ -314,7 +340,18 @@ export const Select = ({
                 key={lowerCasedOption}
                 onClick={() => {
                   setSelected(option);
+                  const nativeSelectElement = document?.querySelector(
+                    `#${id}`
+                  ) as HTMLSelectElement;
+                  nativeSelectElement.value = option;
+                  if (onChange) onChange(option);
                   clickHandler();
+
+                  /*nativeSelectElement.dispatchEvent(
+                    new Event("change", {
+                      bubbles: true,
+                    })
+                  );*/
                 }}
               >
                 {titleCase(lowerCasedOption)}
@@ -330,6 +367,6 @@ export const Select = ({
       ) : (
         ""
       )}
-    </div>
+    </SelectGroupContainer>
   );
 };
