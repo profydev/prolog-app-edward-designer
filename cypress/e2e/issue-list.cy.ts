@@ -17,6 +17,41 @@ describe("Issue List", () => {
     cy.intercept("GET", "https://prolog-api.profy.dev/issue?page=3", {
       fixture: "issues-page-3.json",
     }).as("getIssuesPage3");
+    cy.intercept(
+      "GET",
+      "https://prolog-api.profy.dev/issue?page=1&level=error",
+      {
+        fixture: "issues-page-le.json",
+      }
+    ).as("getIssuesError");
+    cy.intercept(
+      "GET",
+      "https://prolog-api.profy.dev/issue?page=1&level=warning",
+      {
+        fixture: "issues-page-lw.json",
+      }
+    ).as("getIssuesWarning");
+    cy.intercept(
+      "GET",
+      "https://prolog-api.profy.dev/issue?page=1&status=open",
+      {
+        fixture: "issues-page-su.json",
+      }
+    ).as("getIssuesUnresolved");
+    cy.intercept(
+      "GET",
+      "https://prolog-api.profy.dev/issue?page=1&project=ML",
+      {
+        fixture: "issues-page-pml.json",
+      }
+    ).as("getIssuesProjectML");
+    cy.intercept(
+      "GET",
+      "https://prolog-api.profy.dev/issue?page=1&project=frontend",
+      {
+        fixture: "issues-page-pfe.json",
+      }
+    ).as("getIssuesProjectFrontend");
 
     // open issues page
     cy.visit(`http://localhost:3000/dashboard/issues`);
@@ -82,6 +117,45 @@ describe("Issue List", () => {
       cy.wait(["@getProjects", "@getIssuesPage2"]);
       cy.wait(1500);
       cy.contains("Page 2 of 3");
+    });
+
+    it("can be filtered with the status filters", () => {
+      cy.get("[data-test-id=status-test-select]").click();
+      cy.get("[data-test-id=status-test-options]").contains("Resolved").click();
+      cy.contains("Page 1 of 2");
+
+      cy.get("[data-test-id=status-test-select]").click();
+      cy.get("[data-test-id=status-test-options]")
+        .contains("Unresolved")
+        .click();
+      cy.contains("Page 1 of 11");
+    });
+
+    it("can be filtered with the level filters", () => {
+      cy.get("[data-test-id=level-test-select]").click();
+      cy.get("[data-test-id=level-test-options]").contains("Warning").click();
+      cy.contains("Page 1 of 3");
+
+      cy.get("[data-test-id=level-test-select]").click();
+      cy.get("[data-test-id=level-test-options]").contains("Error").click();
+      cy.contains("Page 1 of 5");
+    });
+
+    it("has filters that can be cleared", () => {
+      cy.get("[data-test-id=level-test-select]").click();
+      cy.get("[data-test-id=level-test-options]").contains("Error").click();
+      cy.get("[data-test-id=level-test-select]").click();
+      cy.get("[data-test-id=level-test-options]").contains("--").click();
+      cy.wait(1500);
+      cy.contains("Page 1 of 3");
+    });
+
+    it("can be filtered with project name", () => {
+      cy.get("#project").type("frontend");
+      cy.contains("Page 1 of 11");
+
+      cy.get("#project").clear().type("ML");
+      cy.contains("Page 1 of 0");
     });
   });
 });

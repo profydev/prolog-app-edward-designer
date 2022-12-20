@@ -13,10 +13,14 @@ interface InputType {
   error?: boolean;
   errorMsg?: string;
   inputValue?: string;
+  onChange?: (value: string) => void;
 }
 
 const InputContainer = styled.div`
-  width: 320px;
+  min-width: 280px;
+  & * {
+    box-sizing: border-box;
+  }
 `;
 const InputLabel = styled.label`
   display: block;
@@ -35,17 +39,16 @@ const InputTag = styled.input<{
   border-radius: 8px;
   padding: 10px 14px;
   color: ${color("gray", 900)};
-  background-color: #fff;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
   ${(props) =>
     css`
       padding-left: ${props.icon ? "42px" : "14px"};
       padding-right: ${props.error ? "38px" : "14px"};
       background: ${props.icon
-          ? `url(${props.icon}) left 15.7px center no-repeat, `
-          : "#fff"}
-        ${props.error
-          ? "url(/icons/input-error.svg) right 15.3px center no-repeat"
-          : "#fff"};
+        ? `url(${props.icon}) left 15.7px center no-repeat`
+        : props.error
+        ? "url(/icons/input-error.svg) right 15.3px center no-repeat"
+        : "#fff"};
       border: 1px solid
         ${props.error ? color("error", 300) : color("gray", 300)};
       :focus {
@@ -82,6 +85,7 @@ export const Input = ({
   error = false,
   errorMsg = "",
   inputValue = "",
+  onChange,
 }: InputType) => {
   const [value, setValue] = useState(inputValue);
   return (
@@ -97,7 +101,10 @@ export const Input = ({
         error={error}
         errorMsg={errorMsg}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value);
+          if (onChange) onChange(e.target.value);
+        }}
       />
       {error ? (
         errorMsg ? (
