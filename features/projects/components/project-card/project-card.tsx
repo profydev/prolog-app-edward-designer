@@ -130,7 +130,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </InfoContainer>
       </TopContainer>
       <BottomContainer>
-        <ViewIssuesAnchor href={Routes.issues}>View issues</ViewIssuesAnchor>
+        <ViewIssuesAnchor
+          href={`${Routes.issues}?project=${encodeURIComponent(
+            name.toLowerCase()
+          )}`}
+        >
+          View issues
+        </ViewIssuesAnchor>
       </BottomContainer>
     </Container>
   );
