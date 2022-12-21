@@ -24,6 +24,68 @@ const Container = styled.div`
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  * {
+    box-sizing: border-box;
+  }
+  @media (max-width: ${breakpoint("desktop")}) {
+    display: block;
+    max-width: 100%;
+    tbody {
+      display: block;
+      max-width: 100%;
+    }
+    tr {
+      display: flex;
+      max-width: 100%;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+    }
+    td {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px 0;
+      flex-basis: 100px;
+    }
+    td:first-child {
+      flex: 1;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    & td:not(:first-child):before {
+      content: attr(data-label);
+      color: ${color("gray", 500)};
+      ${textFont("sm", "medium")};
+    }
+    & thead {
+      display: none;
+    }
+  }
+  @media (max-width: 700px) {
+    td {
+      flex: 1;
+    }
+    td:first-child {
+      flex: 0 0 100%;
+      justify-content: flex-start;
+      word-break: break-word;
+    }
+  }
+  @media (max-width: ${breakpoint("mobile")}) {
+    td {
+      max-width: 100%;
+      overflow: hidden;
+    }
+    td > div > div {
+      text-overflow: clip;
+      white-space: nowrap;
+    }
+  }
 `;
 
 const HeaderRow = styled.tr`
@@ -91,6 +153,7 @@ function getParsedInfo(
     return enumToMatch[value as keyof typeof enumToMatch];
   return undefined;
 }
+export const tableLabels = ["Issue", "Level", "Events", "Users"];
 
 export function IssueList() {
   const router = useRouter();
@@ -180,10 +243,9 @@ export function IssueList() {
         <Table>
           <thead>
             <HeaderRow>
-              <HeaderCell>Issue</HeaderCell>
-              <HeaderCell>Level</HeaderCell>
-              <HeaderCell>Events</HeaderCell>
-              <HeaderCell>Users</HeaderCell>
+              {tableLabels.map((label) => (
+                <HeaderCell key={label}>{label}</HeaderCell>
+              ))}
             </HeaderRow>
           </thead>
           <tbody>
